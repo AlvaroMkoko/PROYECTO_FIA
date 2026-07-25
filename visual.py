@@ -4,22 +4,22 @@ import Funciones as f
 import joblib
 def set_size(e, page, container1, width_percentage1, height_percentage1, container2, width_percentage2, height_percentage2,
              container3, container4):
-    container1.width = page.window_width * width_percentage1
-    container1.height = page.window_height * height_percentage1
-    container2.width = page.window_width * width_percentage2
-    container2.height = page.window_height * height_percentage2
+    container1.width = page.width * width_percentage1
+    container1.height = page.height * height_percentage1
+    container2.width = page.width * width_percentage2
+    container2.height = page.height * height_percentage2
 
-    container3.width = page.window_width * width_percentage1
-    container3.height = page.window_height * height_percentage1
-    container4.width = page.window_width * width_percentage2
-    container4.height = page.window_height * height_percentage2
+    container3.width = page.width * width_percentage1
+    container3.height = page.height * height_percentage1
+    container4.width = page.width * width_percentage2
+    container4.height = page.height * height_percentage2
     page.update()
 
 def change_image(page, contenedor, new_image_path: str):
         contenedor.content = ft.Image(
             src=new_image_path,  # Update the image path
             expand=True,
-            fit=ft.ImageFit.CONTAIN,
+            fit=ft.BoxFit.CONTAIN,
         )
         page.update() 
 
@@ -40,7 +40,7 @@ def main(page: ft.Page):
     page.vertical_alignment = ft.MainAxisAlignment.START
     page.horizontal_alignment = ft.CrossAxisAlignment.START
     page.theme_mode=ft.ThemeMode.LIGHT
-    page.bgcolor=ft.colors.BLUE_GREY_800
+    page.bgcolor=ft.Colors.BLUE_GREY_800
     model_tree = joblib.load('decision_tree_model.joblib')
     model_knn = joblib.load('k_nn_model.joblib')
     
@@ -59,14 +59,14 @@ def main(page: ft.Page):
         metricas_knn = "Metrics file not found. Please run the model first."
 
     boton_matriz_confusion_knn = ft.IconButton(
-        icon=ft.icons.IMAGE,  # Icon for the button
+        icon=ft.Icons.IMAGE,  # Icon for the button
         icon_size=30,
         tooltip="Matriz de confusión",
         on_click=lambda _: change_image(page, contenedor_imagen, "img2/matriz_confusion_knn.png"),  # New image path
     )
 
     boton_grafica_dispersion_knn = ft.IconButton(
-        icon=ft.icons.IMAGE,  # Icon for the button
+        icon=ft.Icons.IMAGE,  # Icon for the button
         icon_size=30,
         tooltip="Grafica dispersion",
         on_click=lambda _: change_image(page, contenedor_imagen, "img2/Grafica_dispersion_knn.png"),  # New image path
@@ -114,7 +114,7 @@ def main(page: ft.Page):
     opening_ply_dropdown = ft.Dropdown(
         options=[ft.dropdown.Option(str(i)) for i in range(1, 14)],
         value="1",
-        on_change=update_data,  # Call the update_data function on change
+        on_select=update_data,  # Call the update_data function on change
     )
 
     # Create RadioGroup for victory status (single choice)
@@ -158,11 +158,11 @@ def main(page: ft.Page):
                     content=ft.Image(
                         src=f"img2/matriz_confusion_knn.png",
                         expand=True,
-                        fit=ft.ImageFit.CONTAIN,
+                        fit=ft.BoxFit.CONTAIN,
                     ),
                     margin=10,
                     padding=10,
-                    alignment=ft.alignment.center,
+                    alignment=ft.Alignment.CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=9,
                     border_radius=10,
@@ -171,9 +171,9 @@ def main(page: ft.Page):
 
     eleccion_opciones=ft.Container(
                     content=ft.Row([boton_matriz_confusion_knn, boton_grafica_dispersion_knn],
-                                   alignment=ft.alignment.center
+                                   alignment=ft.Alignment.CENTER
                                    ),
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=1,
 
@@ -187,7 +187,7 @@ def main(page: ft.Page):
                         size=14,  # Font size for better readability
                         selectable=True,  # Allow the user to select and copy text
                     ),
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=1,
                     
@@ -201,8 +201,8 @@ def main(page: ft.Page):
         padding=20,
         bgcolor="blue",
         border_radius=15,
-        border=ft.border.all(3, "white"),
-        alignment=ft.alignment.center,
+        border=ft.Border.all(3, "white"),
+        alignment=ft.Alignment.CENTER,
         )
     
     def on_button_click_knn(e):
@@ -228,7 +228,7 @@ def main(page: ft.Page):
         page.update()
 
     # Create a button and assign the click event
-    boton_knn = ft.ElevatedButton(text="Prediccion", on_click=on_button_click_knn)
+    boton_knn = ft.Button("Prediccion", on_click=on_button_click_knn)
 
 
     items=[
@@ -259,7 +259,7 @@ def main(page: ft.Page):
 
     contenedor_predicciones=ft.Container(
                     content=scrollable_content,
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=1,
                     
@@ -273,10 +273,10 @@ def main(page: ft.Page):
     contenedor_tablero = ft.Container(
                     content=columna_tablero,
                     margin=10,
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.WHITE10,
-                    width=page.window_width * width_percentage_tablero,
-                    height=page.window_height * height_percentage_tablero,
+                    width=page.width * width_percentage_tablero,
+                    height=page.height * height_percentage_tablero,
                     border_radius=10,
                 )
     
@@ -284,10 +284,10 @@ def main(page: ft.Page):
                     content=columna_interaccion,
                     margin=10,
                     padding=10,
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.WHITE10,
-                    width=page.window_width * width_percentage_variables,
-                    height=page.window_height * height_percentage_variables,
+                    width=page.width * width_percentage_variables,
+                    height=page.height * height_percentage_variables,
                     border_radius=10,
                 )
     
@@ -313,7 +313,7 @@ def main(page: ft.Page):
         metricas_tree = "Metrics file not found. Please run the model first."
 
     boton_matriz_confusion_tree = ft.IconButton(
-        icon=ft.icons.IMAGE,  # Icon for the button
+        icon=ft.Icons.IMAGE,  # Icon for the button
         icon_size=30,
         tooltip="Matriz de confusión",
         on_click=lambda _: change_image(page, contenedor_imagen, "img2/matriz_confusion_tree.png"),  # New image path
@@ -361,7 +361,7 @@ def main(page: ft.Page):
     opening_ply_dropdown_tree = ft.Dropdown(
         options=[ft.dropdown.Option(str(i)) for i in range(1, 14)],
         value="1",
-        on_change=update_data_tree,  # Call the update_data function on change
+        on_select=update_data_tree,  # Call the update_data function on change
     )
 
     # Create RadioGroup for victory status (single choice)
@@ -405,11 +405,11 @@ def main(page: ft.Page):
                     content=ft.Image(
                         src=f"img2/matriz_confusion_tree.png",
                         expand=True,
-                        fit=ft.ImageFit.CONTAIN,
+                        fit=ft.BoxFit.CONTAIN,
                     ),
                     margin=10,
                     padding=10,
-                    alignment=ft.alignment.center,
+                    alignment=ft.Alignment.CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=9,
                     border_radius=10,
@@ -418,9 +418,9 @@ def main(page: ft.Page):
 
     eleccion_opciones_tree=ft.Container(
                     content=ft.Row([boton_matriz_confusion_tree],
-                                   alignment=ft.alignment.center
+                                   alignment=ft.Alignment.CENTER
                                    ),
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=1,
 
@@ -434,7 +434,7 @@ def main(page: ft.Page):
                         size=14,  # Font size for better readability
                         selectable=True,  # Allow the user to select and copy text
                     ),
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=1,
                     
@@ -447,8 +447,8 @@ def main(page: ft.Page):
         padding=20,
         bgcolor="blue",
         border_radius=15,
-        border=ft.border.all(3, "white"),
-        alignment=ft.alignment.center,
+        border=ft.Border.all(3, "white"),
+        alignment=ft.Alignment.CENTER,
         )
     
     
@@ -474,7 +474,7 @@ def main(page: ft.Page):
         page.update()
 
     # Create a button and assign the click event
-    boton_tree = ft.ElevatedButton(text="Prediccion", on_click=on_button_click_tree)
+    boton_tree = ft.Button("Prediccion", on_click=on_button_click_tree)
 
 
     
@@ -509,7 +509,7 @@ def main(page: ft.Page):
 
     contenedor_predicciones_tree=ft.Container(
                     content=scrollable_content_tree,
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.GREY,
                     expand=1,
                     
@@ -522,10 +522,10 @@ def main(page: ft.Page):
     contenedor_tablero_tree = ft.Container(
                     content=columna_tablero_tree,
                     margin=10,
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.WHITE10,
-                    width=page.window_width * width_percentage_tablero,
-                    height=page.window_height * height_percentage_tablero,
+                    width=page.width * width_percentage_tablero,
+                    height=page.height * height_percentage_tablero,
                     border_radius=10,
                 )
     
@@ -533,10 +533,10 @@ def main(page: ft.Page):
                     content=columna_interaccion_tree,
                     margin=10,
                     padding=10,
-                    alignment=ft.alignment.top_center,
+                    alignment=ft.Alignment.TOP_CENTER,
                     bgcolor=ft.Colors.WHITE10,
-                    width=page.window_width * width_percentage_variables,
-                    height=page.window_height * height_percentage_variables,
+                    width=page.width * width_percentage_variables,
+                    height=page.height * height_percentage_variables,
                     border_radius=10,
                 )
     
@@ -547,22 +547,23 @@ def main(page: ft.Page):
                                          contenedor_tablero_tree, contenedor_variables_tree)
     
 
-    tabs=ft.Tabs(
-        selected_index=0,
-        animation_duration=300,
-        tabs=[
-            ft.Tab(text="Modelo K-NN", icon=ft.icons.IMAGE_ROUNDED, content=contenido_linea),
-            ft.Tab(text="Árboles de decisión", icon=ft.icons.BAR_CHART, content=contenido_linea_tree)
-        ],
-        expand=1,
-        label_color=ft.Colors.BLUE_500,
-        indicator_color=ft.Colors.BLUE_500,
-        unselected_label_color=ft.Colors.WHITE
-        
-    )
+    content_container = ft.Container(content=contenido_linea, expand=True)
 
-    page.add(tabs)
+    def btn1_clicked(e):
+        content_container.content = contenido_linea
+        page.update()
+
+    def btn2_clicked(e):
+        content_container.content = contenido_linea_tree
+        page.update()
+
+    btn1 = ft.Button("Modelo K-NN", icon=ft.Icons.IMAGE_ROUNDED, on_click=btn1_clicked)
+    btn2 = ft.Button("Árboles de decisión", icon=ft.Icons.BAR_CHART, on_click=btn2_clicked)
+    
+    tabs_row = ft.Row([btn1, btn2], alignment=ft.Alignment.CENTER)
+
+    page.add(ft.Column([tabs_row, content_container], expand=True))
     
 
-ft.app(main)
+ft.run(main)
 

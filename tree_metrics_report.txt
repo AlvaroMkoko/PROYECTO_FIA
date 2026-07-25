@@ -1,13 +1,13 @@
 Metricas de rendimiento:
-Exactitud (Accuracy): 0.6148300720906282
-Precisión (Precision): 0.5897959183673469
-Sensibilidad (Recall): 0.6255411255411255
-Puntuación F1 (F1 Score): 0.6071428571428571
-ROC AUC: 0.6153245902754744
+Exactitud (Accuracy): 0.5952626158599382
+Precisión (Precision): 0.570264765784114
+Sensibilidad (Recall): 0.6060606060606061
+Puntuación F1 (F1 Score): 0.5876180482686254
+ROC AUC: 0.5957611478240161
 
 Detalles adicionales:
 Muestra de prueba analizadas: 971
-Verdaderos negativos (TN): 308
-Falsos positivos (FP): 201
-Falsos negativos (FN): 173
-Verdaderos positivos (TP): 289
+Verdaderos negativos (TN): 298
+Falsos positivos (FP): 211
+Falsos negativos (FN): 182
+Verdaderos positivos (TP): 280
