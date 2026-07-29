@@ -57,7 +57,7 @@ Para ejecutar correctamente el proyecto, se recomienda utilizar **Python 3.9 o s
 Instala los requerimientos recomendados ejecutando el siguiente comando en la consola:
 
 ```bash
-pip install numpy pandas scikit-learn joblib flet matplotlib
+pip install numpy pandas scikit-learn joblib flet matplotlib torch tensorboard statsmodels jupyter
 ```
 
 ---
@@ -72,6 +72,10 @@ pip install numpy pandas scikit-learn joblib flet matplotlib
 | `joblib` | Serialización y carga rápida de modelos y nombres de características entrenados (`.joblib`). |
 | `flet` | Construcción de la interfaz gráfica interactiva del usuario (GUI) con pestañas y controles interactivos. |
 | `matplotlib` | Graficación de curvas de RFE, matrices de confusión, diagramas de dispersión 2D y el árbol de decisión. |
+| `torch` | Entrenamiento de la Red Neuronal (MLP) en PyTorch, incluyendo los bucles de entrenamiento y validación. |
+| `tensorboard` | Visualización de las curvas de pérdida y precisión para el diagnóstico de overfitting. |
+| `statsmodels` | Implementación del Test de McNemar para la comparación estadística entre modelos. |
+| `jupyter` | Ejecución del notebook interactivo `red-neuronal/entrenamiento.ipynb`. |
 
 ---
 
@@ -85,6 +89,11 @@ pip install numpy pandas scikit-learn joblib flet matplotlib
 │   ├── Grafica_dispersion_knn.png
 │   ├── matriz_confusion_knn.png
 │   └── matriz_confusion_tree.png
+├── red-neuronal/            # Experimento de Deep Learning con PyTorch
+│   ├── entrenamiento.ipynb  # Notebook con todo el proceso de entrenamiento y evaluación
+│   ├── reporte.md           # Reporte detallado: overfitting, regularización y McNemar
+│   ├── resultados_experimentos/  # Capturas de TensorBoard (curvas de loss y accuracy)
+│   └── runs/                # Logs de TensorBoard generados durante el entrenamiento
 ├── games.csv                # Dataset original de partidas de ajedrez en formato CSV
 ├── Funciones.py             # Módulo con funciones de preprocesamiento, selección y modelado
 ├── main.py                  # Script principal para limpieza de datos, selección de características y entrenamiento
@@ -166,6 +175,54 @@ Durante la evaluación de los modelos clasificados utilizando un split de prueba
   * Falsos Positivos (FP): 201
   * Falsos Negativos (FN): 173
 
+### 3. Modelo Red Neuronal (PyTorch MLP)
+* **Exactitud (Accuracy)**: `64.88%`
+
+> Ver el reporte completo en [`red-neuronal/reporte.md`](red-neuronal/reporte.md).
+
+---
+
+## Red Neuronal con PyTorch: Diagnóstico y Comparación
+
+Como extensión analítica del proyecto, se entrenó una Red Neuronal Multicapa (MLP) en PyTorch sobre el mismo conjunto de datos y con el mismo preprocesamiento, con el objetivo de:
+1. Aprender a diagnosticar **overfitting** mediante curvas de pérdida en TensorBoard.
+2. Aplicar técnicas de **regularización** para mitigarlo.
+3. Evaluar de forma **estadísticamente rigurosa** si la red neuronal supera a los modelos clásicos.
+
+### Diagnóstico de Overfitting (TensorBoard)
+
+Se entrenó primero una red intencionalmente grande y sin regularización (capas de 512-512-256 neuronas). Al visualizar las curvas en TensorBoard se observó el overfitting clásico: la pérdida de entrenamiento (`Train Loss`) descendió hasta casi cero mientras que la pérdida de validación (`Validation Loss`) llegó a un mínimo y luego comenzó a subir, indicando memorización y pérdida de generalización.
+
+### Mitigación: Regularización
+
+Se rediseñó la arquitectura aplicando tres técnicas:
+
+| Técnica | Función |
+| :--- | :--- |
+| **Dropout** (0.5 / 0.3) | Desactiva neuronas al azar en cada iteración, evitando codependencia entre ellas. |
+| **Weight Decay** (`1e-4`) | Penalización L2 en el optimizador Adam para reducir el sobreajuste a ruido. |
+| **Batch Normalization** | Estabiliza el aprendizaje y acelera la convergencia entre capas. |
+
+Tras la regularización, las curvas de validación dejaron de divergir, logrando una mejor generalización.
+
+### Comparación Estadística (Test de McNemar)
+
+Se compararon las predicciones individuales de la Red Neuronal vs. cada modelo clásico sobre el mismo conjunto de prueba usando el **Test de McNemar** (p-value < 0.05 = diferencia significativa).
+
+| Comparación | Accuracy NN | Accuracy Modelo Clásico | P-Value | Conclusión |
+| :--- | :---: | :---: | :---: | :--- |
+| NN vs. Random Forest | `64.88%` | `65.19%` | `0.887` | ✅ Sin diferencia significativa — rendimiento equivalente |
+| NN vs. K-NN | `64.88%` | `60.97%` | `0.014` | ⚠️ NN significativamente superior |
+| NN vs. Decision Tree | `64.88%` | `60.04%` | `0.009` | ⚠️ NN significativamente superior |
+
+### Conclusión
+
+La Red Neuronal **superó estadísticamente** a los modelos más simples (K-NN y Árbol de Decisión) y **empató en rendimiento** con el Random Forest (sin diferencia estadística). Todos los modelos basados en las características disponibles convergen alrededor del mismo límite de ~65%, lo que sugiere que la información contenida en el dataset (ratings, apertura, tiempo) no es suficiente para predecir el ganador con mayor exactitud — el resultado de una partida de ajedrez depende de factores intangibles no capturados en estas columnas.
+
+Desde una perspectiva de **costo-beneficio**, el Random Forest es la opción más pragmática: logra el mismo nivel de precisión con mucho menor esfuerzo de diseño y calibración que una red neuronal.
+
+> 📄 Reporte completo con gráficas de TensorBoard incluido en [`red-neuronal/reporte.md`](red-neuronal/reporte.md).
+
 ---
 
 ## Notas importantes
@@ -180,4 +237,4 @@ Durante la evaluación de los modelos clasificados utilizando un split de prueba
 
 * **Sistemas de recomendación y predicción**: Herramienta interactiva para que jugadores amateurs estimen sus probabilidades de ganar según su rating y el tipo de apertura elegido.
 * **Análisis demográfico de partidas**: Visualización estadística en 2D (a través de PCA) de cómo se distribuyen los ganadores según las variables clave de la partida.
-* **Propósito académico**: Demostración de técnicas clave de Inteligencia Artificial (procesamiento, codificación nominal/discreta, balanceo de datos, selección RFE, reducción de dimensionalidad PCA, evaluación clásica de modelos y desarrollo de interfaces modernas).
+* **Propósito académico**: Demostración de técnicas clave de Inteligencia Artificial (procesamiento, codificación nominal/discreta, balanceo de datos, selección RFE, reducción de dimensionalidad PCA, evaluación clásica de modelos, desarrollo de interfaces modernas y análisis empírico de Deep Learning con PyTorch incluyendo diagnóstico de overfitting y comparación estadística rigurosa).
