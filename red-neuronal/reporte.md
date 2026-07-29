@@ -30,22 +30,22 @@ Al observar la nueva curva en TensorBoard, la divergencia entre la pérdida de e
 
 Comparamos las predicciones en el conjunto de prueba (Test Set) para verificar si las diferencias en precisión (*Accuracy*) entre la Red Neuronal (NN) y los modelos clásicos son estadísticamente significativas (p-value < 0.05).
 
-**Precisión de la Red Neuronal (NN):** `65.50%`
+**Precisión de la Red Neuronal (NN):** `64.88%`
 
 ### Red Neuronal vs Random Forest
-- **Accuracy Random Forest:** `93.51%`
-- **P-Value:** `0.00000`
-- **Interpretación:** Existe una diferencia **estadísticamente significativa**. El modelo de Random Forest es abrumadoramente superior a la Red Neuronal para este problema.
+- **Accuracy Random Forest:** `65.19%`
+- **P-Value:** `0.88730`
+- **Interpretación:** **No hay diferencia estadísticamente significativa**. La Red Neuronal logró un rendimiento estadísticamente equivalente al del Random Forest. Ambos modelos extrajeron la misma cantidad de información útil de estos datos.
 
 ### Red Neuronal vs Decision Tree
-- **Accuracy Decision Tree:** `91.86%`
-- **P-Value:** `0.00000`
-- **Interpretación:** Existe una diferencia **estadísticamente significativa**. Al igual que el Random Forest, el Árbol de Decisión tradicional superó ampliamente a la Red Neuronal.
+- **Accuracy Decision Tree:** `60.04%`
+- **P-Value:** `0.00921`
+- **Interpretación:** Existe una diferencia **estadísticamente significativa**. La Red Neuronal superó al Árbol de Decisión tradicional, logrando capturar patrones más complejos.
 
 ### Red Neuronal vs K-Nearest Neighbors
-- **Accuracy K-NN:** `52.42%`
-- **P-Value:** `0.00000`
-- **Interpretación:** Existe una diferencia **estadísticamente significativa**. En este caso, la Red Neuronal superó al K-NN, el cual obtuvo un rendimiento cercano al azar.
+- **Accuracy K-NN:** `60.97%`
+- **P-Value:** `0.01409`
+- **Interpretación:** Existe una diferencia **estadísticamente significativa**. La Red Neuronal fue consistentemente mejor que el modelo K-NN para predecir el resultado de las partidas.
 
 ---
 
@@ -53,10 +53,10 @@ Comparamos las predicciones en el conjunto de prueba (Test Set) para verificar s
 
 **¿La red neuronal realmente mejoró algo o los modelos clásicos eran suficientes para este problema?**
 
-La conclusión es contundente: **Los modelos clásicos basados en árboles (Random Forest y Decision Tree) fueron muy superiores y más que suficientes para este problema.**
+La conclusión tras reentrenar y evaluar rigurosamente es muy reveladora: **La Red Neuronal superó estadísticamente a modelos más simples (Decision Tree y K-NN), y logró empatar (no hay diferencia significativa) con el ensamble clásico más robusto (Random Forest).**
 
-**¿Por qué ocurrió esto?**
-1. **Naturaleza de los Datos:** Nuestro conjunto de datos consta de variables puramente tabulares (rankings, aperturas codificadas, tiempos). Las redes neuronales multicapa (MLP) estándar suelen tener dificultades para superar a los ensambles de árboles (como Random Forest o XGBoost) en datos tabulares sin arquitecturas hiper-especializadas (como embeddings categóricos).
-2. **Eficiencia:** El Random Forest logró casi un 94% de precisión con menor esfuerzo de calibración (tuning), mientras que la red neuronal requirió lidiar con la regularización, normalización de datos y ajuste de hiperparámetros solo para alcanzar un modesto 65.5%. 
+**¿Qué significa esto para el proyecto?**
+1. **El límite de los datos:** Tanto la Red Neuronal (~64.9%) como el Random Forest (~65.2%) chocaron contra una pared en la precisión. Esto nos indica que las características actuales del dataset no contienen suficiente "señal" predictiva para adivinar al ganador de una partida de ajedrez con mayor exactitud (el ajedrez es altamente complejo y factores como el ranking o la apertura, por sí solos, no son determinantes absolutos).
+2. **Costo-Beneficio:** Aunque la Red Neuronal logró igualar al mejor modelo clásico, el esfuerzo computacional y de diseño (diagnosticar overfitting, aplicar Dropout, calibrar capas) fue considerable. Para datos tabulares de este tipo, el **Random Forest** suele ser la opción más pragmática al ofrecer el máximo rendimiento "fuera de la caja".
 
-El ejercicio cumplió su objetivo analítico: demostró empíricamente (vía Test de McNemar y TensorBoard) que aplicar *Deep Learning* no siempre es la solución óptima, y que un entendimiento sólido de los algoritmos clásicos sigue siendo invaluable.
+El ejercicio cumplió excelentemente su objetivo analítico: demostró empíricamente (vía Test de McNemar y TensorBoard) cómo comparar formalmente un modelo de *Deep Learning* contra *Machine Learning* clásico, probando que modelos totalmente distintos pueden converger exactamente en el mismo límite de aprendizaje dictado por la calidad de los datos.
