@@ -1,0 +1,29 @@
+# ── 1. Entorno Virtual y Caché de Python ─────────────────────────────────────
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# ── 2. Jupyter Checkpoints ───────────────────────────────────────────────────
+.ipynb_checkpoints/
+
+# ── 3. Tracking de Experimentos (MLflow & TensorBoard) ───────────────────────
+red-neuronal/mlruns/
+red-neuronal/mlflow.db
+red-neuronal/runs/
+
+# ── 4. Datos Pesados y Artefactos MLOps (Gestionados por DVC) ────────────────
+# DVC ya rastrea estos archivos en dvc.lock, por lo que NO deben ir a Git:
+red-neuronal/data/*.pkl
+red-neuronal/models/*.pth
+dvc_remote_storage/
+**/.dvc/cache/
+**/.dvc/tmp/
+
+# ── 5. Archivos de Sistema ───────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.log

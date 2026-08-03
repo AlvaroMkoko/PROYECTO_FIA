@@ -1,0 +1,50 @@
+# dvc.yaml
+# --------
+# Pipeline reproducible del proyecto de red neuronal.
+# Ejecutar con: dvc repro
+#
+# Etapas:
+#   preprocess → train → evaluate
+
+stages:
+
+  preprocess:
+    cmd: python scripts/preprocess.py
+    deps:
+      - scripts/preprocess.py
+      - ../games.csv
+      - ../chess_random_forest_model.joblib
+    outs:
+      - data/processed.pkl
+
+  train:
+    cmd: python scripts/train_best.py
+    deps:
+      - scripts/train_best.py
+      - data/processed.pkl
+      - params.yaml
+    params:
+      - params.yaml:
+          - train.lr
+          - train.dropout
+          - train.hidden_size
+          - train.weight_decay
+          - train.epochs
+          - train.batch_size
+    outs:
+      - models/best_model.pth
+
+  evaluate:
+    cmd: python scripts/evaluate.py
+    deps:
+      - scripts/evaluate.py
+      - models/best_model.pth
+      - data/processed.pkl
+      - params.yaml
+    params:
+      - params.yaml:
+          - train.hidden_size
+          - train.dropout
+    metrics:
+      - metrics/scores.json:
+          cache: false

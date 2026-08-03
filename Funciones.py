@@ -61,7 +61,7 @@ def balance(data):
     minimo_clase = conteo_clase.min()
 
     # Submuestreo de cada clase
-    data = data.groupby('winner').apply(lambda x: x.sample(minimo_clase)).reset_index(level=0).reset_index(drop=True)
+    data = data.groupby('winner', group_keys=False).apply(lambda x: x.sample(minimo_clase)).reset_index(drop=True)
     print("Negras: " + str(len(data[data['winner'] == 0])))
     print("Blancas: " + str(len(data[data['winner'] == 1])))
     return data

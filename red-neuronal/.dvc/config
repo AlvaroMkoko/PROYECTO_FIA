@@ -1,0 +1,5 @@
+[core]
+    no_scm = True
+    remote = myremote
+['remote "myremote"']
+    url = c:\Users\alvar\.gemini\antigravity\worktrees\PROYECTO_FIA\dvc_remote_storage
