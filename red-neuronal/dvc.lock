@@ -1,0 +1,78 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python scripts/preprocess.py
+    deps:
+    - path: ../chess_random_forest_model.joblib
+      hash: md5
+      md5: ad77db2d9d7ea07a4abd1d7a1a41c463
+      size: 17859112
+    - path: ../games.csv
+      hash: md5
+      md5: 22a652ce21b9ecc314b979cf6b28d463
+      size: 7672655
+    - path: scripts/preprocess.py
+      hash: md5
+      md5: 645ef971c2222c0227a92f50067ad473
+      size: 2293
+    outs:
+    - path: data/processed.pkl
+      hash: md5
+      md5: 5efb27b9b3b34c5a8a9bbd231de852fe
+      size: 505171
+  train:
+    cmd: python scripts/train_best.py
+    deps:
+    - path: data/processed.pkl
+      hash: md5
+      md5: 5efb27b9b3b34c5a8a9bbd231de852fe
+      size: 505171
+    - path: params.yaml
+      hash: md5
+      md5: e2a070d7c5a3f15178fc7a6efc0c3173
+      size: 265
+    - path: scripts/train_best.py
+      hash: md5
+      md5: 6ea98772ca90f8c77fc95b73a49d974f
+      size: 4435
+    params:
+      params.yaml:
+        train.batch_size: 64
+        train.dropout: 0.4
+        train.epochs: 60
+        train.hidden_size: 128
+        train.lr: 0.01
+        train.weight_decay: 0.001
+    outs:
+    - path: models/best_model.pth
+      hash: md5
+      md5: 26ee4f57980f10308b423e14d918123c
+      size: 49077
+  evaluate:
+    cmd: python scripts/evaluate.py
+    deps:
+    - path: data/processed.pkl
+      hash: md5
+      md5: 5efb27b9b3b34c5a8a9bbd231de852fe
+      size: 505171
+    - path: models/best_model.pth
+      hash: md5
+      md5: 26ee4f57980f10308b423e14d918123c
+      size: 49077
+    - path: params.yaml
+      hash: md5
+      md5: e2a070d7c5a3f15178fc7a6efc0c3173
+      size: 265
+    - path: scripts/evaluate.py
+      hash: md5
+      md5: 7a1d202a0c2f88fd572474c70c960c5c
+      size: 3352
+    params:
+      params.yaml:
+        train.dropout: 0.4
+        train.hidden_size: 128
+    outs:
+    - path: metrics/scores.json
+      hash: md5
+      md5: 683c3b6cc4f043ac5e2e58bd1aafcd55
+      size: 48

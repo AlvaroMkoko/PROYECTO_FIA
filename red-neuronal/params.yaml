@@ -1,0 +1,12 @@
+# params.yaml
+# -----------
+# Hiperparámetros del mejor modelo encontrado por el Grid Search.
+# Modifica estos valores y ejecuta `dvc repro` para re-entrenar.
+
+train:
+  lr: 0.01
+  dropout: 0.3
+  hidden_size: 128
+  weight_decay: 0.001
+  epochs: 60
+  batch_size: 64

@@ -1,0 +1,27 @@
+cmd: python scripts/train_best.py
+deps:
+- path: data/processed.pkl
+  hash: md5
+  md5: 5efb27b9b3b34c5a8a9bbd231de852fe
+  size: 505171
+- path: params.yaml
+  hash: md5
+  md5: a05b3078bfdbbd3d45466f51767edb59
+  size: 267
+- path: scripts/train_best.py
+  hash: md5
+  md5: 6ea98772ca90f8c77fc95b73a49d974f
+  size: 4435
+params:
+  params.yaml:
+    train.batch_size: 64
+    train.dropout: 0.3
+    train.epochs: 60
+    train.hidden_size: 128
+    train.lr: 0.002
+    train.weight_decay: 0.0001
+outs:
+- path: models/best_model.pth
+  hash: md5
+  md5: f191ed6db0577a16bb40460051fd5b26
+  size: 49077
