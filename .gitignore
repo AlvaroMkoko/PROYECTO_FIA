@@ -20,8 +20,8 @@ red-neuronal/runs/
 red-neuronal/data/*.pkl
 red-neuronal/models/*.pth
 dvc_remote_storage/
-.dvc/cache/
-.dvc/tmp/
+**/.dvc/cache/
+**/.dvc/tmp/
 
 # ── 5. Archivos de Sistema ───────────────────────────────────────────────────
 .DS_Store
