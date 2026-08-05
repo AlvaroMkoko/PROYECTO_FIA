@@ -13,8 +13,8 @@ stages:
       size: 7672655
     - path: scripts/preprocess.py
       hash: md5
-      md5: 645ef971c2222c0227a92f50067ad473
-      size: 2293
+      md5: db794223ed108cdff07840009a303ea9
+      size: 2362
     outs:
     - path: data/processed.pkl
       hash: md5
@@ -29,24 +29,24 @@ stages:
       size: 505171
     - path: params.yaml
       hash: md5
-      md5: e2a070d7c5a3f15178fc7a6efc0c3173
-      size: 265
+      md5: caa55c2f5bf57c2dc5d7795da2eab268
+      size: 280
     - path: scripts/train_best.py
       hash: md5
-      md5: 6ea98772ca90f8c77fc95b73a49d974f
-      size: 4435
+      md5: d61805eacd22bfbd6c61434235bb6d67
+      size: 4535
     params:
       params.yaml:
         train.batch_size: 64
-        train.dropout: 0.4
-        train.epochs: 60
+        train.dropout: 0.3
+        train.epochs: 120
         train.hidden_size: 128
-        train.lr: 0.01
+        train.lr: 0.0005
         train.weight_decay: 0.001
     outs:
     - path: models/best_model.pth
       hash: md5
-      md5: 26ee4f57980f10308b423e14d918123c
+      md5: 47d4ed3236e59bd50c0f9dc8328bb9c3
       size: 49077
   evaluate:
     cmd: python scripts/evaluate.py
@@ -57,22 +57,22 @@ stages:
       size: 505171
     - path: models/best_model.pth
       hash: md5
-      md5: 26ee4f57980f10308b423e14d918123c
+      md5: 47d4ed3236e59bd50c0f9dc8328bb9c3
       size: 49077
     - path: params.yaml
       hash: md5
-      md5: e2a070d7c5a3f15178fc7a6efc0c3173
-      size: 265
+      md5: caa55c2f5bf57c2dc5d7795da2eab268
+      size: 280
     - path: scripts/evaluate.py
       hash: md5
-      md5: 7a1d202a0c2f88fd572474c70c960c5c
-      size: 3352
+      md5: b352d414e3df5958841bed69ba7bcf96
+      size: 3436
     params:
       params.yaml:
-        train.dropout: 0.4
+        train.dropout: 0.3
         train.hidden_size: 128
     outs:
     - path: metrics/scores.json
       hash: md5
-      md5: 683c3b6cc4f043ac5e2e58bd1aafcd55
-      size: 48
+      md5: d08e077871aa5a99bd624d1fbe9936c9
+      size: 49
