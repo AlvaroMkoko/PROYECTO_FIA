@@ -27,3 +27,23 @@ dvc_remote_storage/
 .DS_Store
 Thumbs.db
 *.log
+
+# ── 6. Modelos entrenados (gestionados por DVC o MLflow) ─────────────────────
+*.pt
+*.pth
+*.joblib
+
+# ── 7. Docker ─────────────────────────────────────────────────────────────────
+# Las imágenes no se suben a Git — solo el Dockerfile y requirements.txt
+api/logs/
+api/reports/
+api/artifacts/
+
+# ── 8. Evidently ──────────────────────────────────────────────────────────────
+reports/
+**/drift_report_*.html
+
+# ── 9. Variables de entorno y secretos ────────────────────────────────────────
+.env
+.env.*
+secrets.yaml
